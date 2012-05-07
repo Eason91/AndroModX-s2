@@ -600,6 +600,7 @@ struct rq {
 	/* time-based average load */
 	u64 nr_last_stamp;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	u64 nr_running_integral;
 	seqcount_t ave_seqcnt;
 =======
@@ -609,6 +610,9 @@ struct rq {
 =======
 	seqcount_t ave_seqcnt;
 >>>>>>> 01216ed... scheduler: Re-compute time-average nr_running on read
+=======
+	unsigned int ave_nr_running;
+>>>>>>> 22ef12d... scheduler: compute time-average nr_running per run-queue
 
 	/* capture load from *all* tasks on this cpu: */
 	struct load_weight load;
@@ -1687,6 +1691,7 @@ static inline u64 steal_ticks(u64 steal)
  * 24 ~=  16777216ns =  16.8ms
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define NR_AVE_SCALE(x)		((x) << FSHIFT)
 
 
@@ -1702,11 +1707,14 @@ static inline u64 do_nr_running_integral(struct rq *rq)
 
 	return nr_running_integral;
 =======
+=======
+>>>>>>> 22ef12d... scheduler: compute time-average nr_running per run-queue
 #define NR_AVE_PERIOD_EXP	27
 #define NR_AVE_SCALE(x)		((x) << FSHIFT)
 #define NR_AVE_PERIOD		(1 << NR_AVE_PERIOD_EXP)
 #define NR_AVE_DIV_PERIOD(x)	((x) >> NR_AVE_PERIOD_EXP)
 
+<<<<<<< HEAD
 static inline unsigned int do_avg_nr_running(struct rq *rq)
 {
 	s64 nr, deltax;
@@ -1728,11 +1736,27 @@ static inline unsigned int do_avg_nr_running(struct rq *rq)
 
 	return ave_nr_running;
 >>>>>>> 01216ed... scheduler: Re-compute time-average nr_running on read
+=======
+static inline void do_avg_nr_running(struct rq *rq)
+{
+	s64 nr, deltax;
+
+	deltax = rq->clock_task - rq->nr_last_stamp;
+	rq->nr_last_stamp = rq->clock_task;
+	nr = NR_AVE_SCALE(rq->nr_running);
+
+	if (deltax > NR_AVE_PERIOD)
+		rq->ave_nr_running = nr;
+	else
+		rq->ave_nr_running +=
+			NR_AVE_DIV_PERIOD(deltax * (nr - rq->ave_nr_running));
+>>>>>>> 22ef12d... scheduler: compute time-average nr_running per run-queue
 }
 
 static inline void inc_nr_running(struct rq *rq)
 {
 	sched_update_nr_prod(cpu_of(rq), 1, true);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	write_seqcount_begin(&rq->ave_seqcnt);
@@ -1753,6 +1777,9 @@ static inline void inc_nr_running(struct rq *rq)
 	write_seqcount_begin(&rq->ave_seqcnt);
 	rq->ave_nr_running = do_avg_nr_running(rq);
 	rq->nr_last_stamp = rq->clock_task;
+=======
+	do_avg_nr_running(rq);
+>>>>>>> 22ef12d... scheduler: compute time-average nr_running per run-queue
 	rq->nr_running++;
 	write_seqcount_end(&rq->ave_seqcnt);
 >>>>>>> 01216ed... scheduler: Re-compute time-average nr_running on read
@@ -1770,6 +1797,7 @@ static inline void inc_nr_running(struct rq *rq)
 static inline void dec_nr_running(struct rq *rq)
 {
 	sched_update_nr_prod(cpu_of(rq), 1, false);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	write_seqcount_begin(&rq->ave_seqcnt);
@@ -1794,9 +1822,22 @@ unsigned long avg_nr_running(void)
 	write_seqcount_begin(&rq->ave_seqcnt);
 	rq->ave_nr_running = do_avg_nr_running(rq);
 	rq->nr_last_stamp = rq->clock_task;
+=======
+	do_avg_nr_running(rq);
+>>>>>>> 22ef12d... scheduler: compute time-average nr_running per run-queue
 	rq->nr_running--;
 	write_seqcount_end(&rq->ave_seqcnt);
 >>>>>>> 01216ed... scheduler: Re-compute time-average nr_running on read
+}
+
+unsigned long avg_nr_running(void)
+{
+	unsigned long i, sum = 0;
+
+	for_each_online_cpu(i)
+		sum += cpu_rq(i)->ave_nr_running;
+
+	return sum;
 }
 
 static inline void rq_last_tick_reset(struct rq *rq)

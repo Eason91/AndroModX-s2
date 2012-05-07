@@ -172,7 +172,11 @@ extern int nr_processes(void);
 extern unsigned long nr_running(void);
 extern unsigned long nr_iowait(void);
 <<<<<<< HEAD
+<<<<<<< HEAD
 extern u64 nr_running_integral(unsigned int cpu);
+=======
+extern unsigned long avg_nr_running(void);
+>>>>>>> 22ef12d... scheduler: compute time-average nr_running per run-queue
 =======
 extern unsigned long avg_nr_running(void);
 >>>>>>> 22ef12d... scheduler: compute time-average nr_running per run-queue
