@@ -4555,6 +4555,7 @@ unsigned long this_cpu_load(void)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 u64 nr_running_integral(unsigned int cpu)
 {
 	unsigned int seqcnt;
@@ -4582,6 +4583,8 @@ u64 nr_running_integral(unsigned int cpu)
 
 	return integral;
 =======
+=======
+>>>>>>> 01216ed... scheduler: Re-compute time-average nr_running on read
 unsigned long avg_nr_running(void)
 {
 	unsigned long i, sum = 0;
@@ -4607,6 +4610,9 @@ unsigned long avg_nr_running(void)
 	}
 
 	return sum;
+<<<<<<< HEAD
+>>>>>>> 01216ed... scheduler: Re-compute time-average nr_running on read
+=======
 >>>>>>> 01216ed... scheduler: Re-compute time-average nr_running on read
 }
 
