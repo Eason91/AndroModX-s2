@@ -15,8 +15,11 @@
 #include <linux/slab.h>
 #include <linux/sort.h>
 #include <linux/err.h>
+<<<<<<< HEAD
 #include <linux/of.h>
 #include <linux/sched.h>
+=======
+>>>>>>> 640f0f2... cpufreq: Persist cpufreq time in state data across hotplug
 #include <asm/cputime.h>
 
 static spinlock_t cpufreq_stats_lock;
@@ -41,12 +44,15 @@ struct all_cpufreq_stats {
 	unsigned int *freq_table;
 };
 
+<<<<<<< HEAD
 struct cpufreq_power_stats {
 	unsigned int state_num;
 	unsigned int *curr;
 	unsigned int *freq_table;
 };
 
+=======
+>>>>>>> 640f0f2... cpufreq: Persist cpufreq time in state data across hotplug
 struct all_freq_table {
 	unsigned int *freq_table;
 	unsigned int table_size;
@@ -127,6 +133,7 @@ static int get_index_all_cpufreq_stat(struct all_cpufreq_stats *all_stat,
 	return -1;
 }
 
+<<<<<<< HEAD
 void acct_update_power(struct task_struct *task, cputime_t cputime)
 {
 	struct cpufreq_power_stats *powerstats;
@@ -170,6 +177,8 @@ static ssize_t show_current_in_state(struct kobject *kobj,
 	return len;
 }
 
+=======
+>>>>>>> 640f0f2... cpufreq: Persist cpufreq time in state data across hotplug
 static ssize_t show_all_time_in_state(struct kobject *kobj,
 		struct kobj_attribute *attr, char *buf)
 {
@@ -274,9 +283,12 @@ static struct attribute_group stats_attr_group = {
 static struct kobj_attribute _attr_all_time_in_state = __ATTR(all_time_in_state,
 		0444, show_all_time_in_state, NULL);
 
+<<<<<<< HEAD
 static struct kobj_attribute _attr_current_in_state = __ATTR(current_in_state,
 		0444, show_current_in_state, NULL);
 
+=======
+>>>>>>> 640f0f2... cpufreq: Persist cpufreq time in state data across hotplug
 static int freq_table_get_index(struct cpufreq_stats *stat, unsigned int freq)
 {
 	int index;
@@ -317,21 +329,35 @@ static void cpufreq_stats_free_table(unsigned int cpu)
 
 static void cpufreq_allstats_free(void)
 {
+<<<<<<< HEAD
 	int cpu;
+=======
+	int i;
+>>>>>>> 640f0f2... cpufreq: Persist cpufreq time in state data across hotplug
 	struct all_cpufreq_stats *all_stat;
 
 	sysfs_remove_file(cpufreq_global_kobject,
 						&_attr_all_time_in_state.attr);
 
+<<<<<<< HEAD
 	for_each_possible_cpu(cpu) {
 		all_stat = per_cpu(all_cpufreq_stats, cpu);
+=======
+	for (i = 0; i < total_cpus; i++) {
+		all_stat = per_cpu(all_cpufreq_stats, i);
+>>>>>>> 640f0f2... cpufreq: Persist cpufreq time in state data across hotplug
 		if (!all_stat)
 			continue;
 		kfree(all_stat->time_in_state);
 		kfree(all_stat);
+<<<<<<< HEAD
 		per_cpu(all_cpufreq_stats, cpu) = NULL;
 	}
 
+=======
+		per_cpu(all_cpufreq_stats, i) = NULL;
+	}
+>>>>>>> 640f0f2... cpufreq: Persist cpufreq time in state data across hotplug
 	if (all_freq_table) {
 		kfree(all_freq_table->freq_table);
 		kfree(all_freq_table);
@@ -339,6 +365,7 @@ static void cpufreq_allstats_free(void)
 	}
 }
 
+<<<<<<< HEAD
 static void cpufreq_powerstats_free(void)
 {
 	int cpu;
@@ -356,6 +383,8 @@ static void cpufreq_powerstats_free(void)
 	}
 }
 
+=======
+>>>>>>> 640f0f2... cpufreq: Persist cpufreq time in state data across hotplug
 static int __cpufreq_stats_create_table(struct cpufreq_policy *policy,
 		struct cpufreq_frequency_table *table, int count)
 {
@@ -435,6 +464,7 @@ static void cpufreq_stats_update_policy_cpu(struct cpufreq_policy *policy)
 	stat->cpu = policy->cpu;
 }
 
+<<<<<<< HEAD
 static void cpufreq_powerstats_create(unsigned int cpu,
 		struct cpufreq_frequency_table *table, int count) {
 	unsigned int alloc_size, i = 0, j = 0, ret = 0;
@@ -483,6 +513,8 @@ static void cpufreq_powerstats_create(unsigned int cpu,
 	spin_unlock(&cpufreq_stats_lock);
 }
 
+=======
+>>>>>>> 640f0f2... cpufreq: Persist cpufreq time in state data across hotplug
 static int compare_for_sort(const void *lhs_ptr, const void *rhs_ptr)
 {
 	unsigned int lhs = *(const unsigned int *)(lhs_ptr);
@@ -513,6 +545,7 @@ static void create_all_freq_table(void)
 	return;
 }
 
+<<<<<<< HEAD
 static void free_all_freq_table(void)
 {
 	if (all_freq_table) {
@@ -523,12 +556,18 @@ static void free_all_freq_table(void)
 	}
 }
 
+=======
+>>>>>>> 640f0f2... cpufreq: Persist cpufreq time in state data across hotplug
 static void add_all_freq_table(unsigned int freq)
 {
 	unsigned int size;
 	size = sizeof(unsigned int) * (all_freq_table->table_size + 1);
 	all_freq_table->freq_table = krealloc(all_freq_table->freq_table,
+<<<<<<< HEAD
 			size, GFP_ATOMIC);
+=======
+			size, GFP_KERNEL);
+>>>>>>> 640f0f2... cpufreq: Persist cpufreq time in state data across hotplug
 	if (IS_ERR(all_freq_table->freq_table)) {
 		pr_warn("Could not reallocate memory for freq_table\n");
 		all_freq_table->freq_table = NULL;
@@ -537,6 +576,7 @@ static void add_all_freq_table(unsigned int freq)
 	all_freq_table->freq_table[all_freq_table->table_size++] = freq;
 }
 
+<<<<<<< HEAD
 static void cpufreq_allstats_create(unsigned int cpu,
 		struct cpufreq_frequency_table *table, int count)
 {
@@ -545,6 +585,26 @@ static void cpufreq_allstats_create(unsigned int cpu,
 	struct all_cpufreq_stats *all_stat;
 	bool sort_needed = false;
 
+=======
+static void cpufreq_allstats_create(unsigned int cpu)
+{
+	int i , j = 0;
+	unsigned int alloc_size, count = 0;
+	struct cpufreq_frequency_table *table = cpufreq_frequency_get_table(cpu);
+	struct all_cpufreq_stats *all_stat;
+	bool sort_needed = false;
+
+	if (!table)
+		return;
+
+	for (i = 0; table[i].frequency != CPUFREQ_TABLE_END; i++) {
+		unsigned int freq = table[i].frequency;
+		if (freq == CPUFREQ_ENTRY_INVALID)
+			continue;
+		count++;
+	}
+
+>>>>>>> 640f0f2... cpufreq: Persist cpufreq time in state data across hotplug
 	all_stat = kzalloc(sizeof(struct all_cpufreq_stats),
 			GFP_KERNEL);
 	if (!all_stat) {
@@ -600,6 +660,7 @@ static int cpufreq_stat_notifier_policy(struct notifier_block *nb,
 	if (!table)
 		return 0;
 
+<<<<<<< HEAD
 	for (i = 0; table[i].frequency != CPUFREQ_TABLE_END; i++) {
 		unsigned int freq = table[i].frequency;
 
@@ -613,6 +674,10 @@ static int cpufreq_stat_notifier_policy(struct notifier_block *nb,
 
 	if (!per_cpu(cpufreq_power_stats, cpu))
 		cpufreq_powerstats_create(cpu, table, count);
+=======
+	if (!per_cpu(all_cpufreq_stats, cpu))
+		cpufreq_allstats_create(cpu);
+>>>>>>> 640f0f2... cpufreq: Persist cpufreq time in state data across hotplug
 
 	if (val == CPUFREQ_CREATE_POLICY)
 		ret = __cpufreq_stats_create_table(policy, table, count);
@@ -727,6 +792,7 @@ static int __init cpufreq_stats_init(void)
 		return ret;
 	}
 
+<<<<<<< HEAD
 	ret = cpufreq_sysfs_create_file(&_attr_all_time_in_state.attr);
 	if (ret)
 		pr_warn("Cannot create sysfs file for cpufreq stats\n");
@@ -734,6 +800,12 @@ static int __init cpufreq_stats_init(void)
 	ret = cpufreq_sysfs_create_file(&_attr_current_in_state.attr);
 	if (ret)
 		pr_warn("Cannot create sysfs file for cpufreq current stats\n");
+=======
+	create_all_freq_table();
+	ret = cpufreq_sysfs_create_file(&_attr_all_time_in_state.attr);
+	if (ret)
+		pr_warn("Error creating sysfs file for cpufreq stats\n");
+>>>>>>> 640f0f2... cpufreq: Persist cpufreq time in state data across hotplug
 
 	return 0;
 }
@@ -748,7 +820,10 @@ static void __exit cpufreq_stats_exit(void)
 	for_each_online_cpu(cpu)
 		cpufreq_stats_free_table(cpu);
 	cpufreq_allstats_free();
+<<<<<<< HEAD
 	cpufreq_powerstats_free();
+=======
+>>>>>>> 640f0f2... cpufreq: Persist cpufreq time in state data across hotplug
 }
 MODULE_AUTHOR("Zou Nan hai <nanhai.zou@intel.com>");
 MODULE_DESCRIPTION("'cpufreq_stats' - A driver to export cpufreq stats "
