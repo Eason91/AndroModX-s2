@@ -19,11 +19,14 @@
 <<<<<<< HEAD
 #include <linux/of.h>
 #include <linux/sched.h>
+<<<<<<< HEAD
 =======
 >>>>>>> 640f0f2... cpufreq: Persist cpufreq time in state data across hotplug
 =======
 #include <linux/of.h>
 >>>>>>> 6d10e71... cpufreq_stats: Adds the fucntionality to load current values for each frequency for all the cores.
+=======
+>>>>>>> 7ad807d... sched: cpufreq: Adds a field cpu_power in the task_struct
 #include <asm/cputime.h>
 
 static spinlock_t cpufreq_stats_lock;
@@ -145,8 +148,12 @@ static int get_index_all_cpufreq_stat(struct all_cpufreq_stats *all_stat,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void acct_update_power(struct task_struct *task, cputime_t cputime)
 {
+=======
+void acct_update_power(struct task_struct *task, cputime_t cputime) {
+>>>>>>> 7ad807d... sched: cpufreq: Adds a field cpu_power in the task_struct
 	struct cpufreq_power_stats *powerstats;
 	struct cpufreq_stats *stats;
 	unsigned int cpu_num, curr;
@@ -160,6 +167,7 @@ void acct_update_power(struct task_struct *task, cputime_t cputime)
 		return;
 
 	curr = powerstats->curr[stats->last_index];
+<<<<<<< HEAD
 	if (task->cpu_power != ULLONG_MAX)
 		task->cpu_power += curr * cputime_to_usecs(cputime);
 }
@@ -167,6 +175,12 @@ EXPORT_SYMBOL_GPL(acct_update_power);
 
 =======
 >>>>>>> 6d10e71... cpufreq_stats: Adds the fucntionality to load current values for each frequency for all the cores.
+=======
+	task->cpu_power += curr * cputime_to_usecs(cputime);
+}
+EXPORT_SYMBOL_GPL(acct_update_power);
+
+>>>>>>> 7ad807d... sched: cpufreq: Adds a field cpu_power in the task_struct
 static ssize_t show_current_in_state(struct kobject *kobj,
 		struct kobj_attribute *attr, char *buf)
 {

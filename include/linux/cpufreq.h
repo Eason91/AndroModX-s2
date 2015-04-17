@@ -506,9 +506,14 @@ static inline int cpufreq_generic_exit(struct cpufreq_policy *policy)
  *                         CPUFREQ STATS                             *
  *********************************************************************/
 
+<<<<<<< HEAD
 #ifdef CONFIG_CPU_FREQ_STAT
 void acct_update_power(struct task_struct *p, cputime_t cputime);
 #else
 static inline void acct_update_power(struct task_struct *p, cputime_t cputime) {}
 #endif
+=======
+void acct_update_power(struct task_struct *p, cputime_t cputime);
+
+>>>>>>> 7ad807d... sched: cpufreq: Adds a field cpu_power in the task_struct
 #endif /* _LINUX_CPUFREQ_H */
