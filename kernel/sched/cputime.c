@@ -161,14 +161,20 @@ void account_user_time(struct task_struct *p, cputime_t cputime,
 	acct_account_cputime(p);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> e313471... sched: Do not track cpu power for tasks if arch does not support it
 #ifdef CONFIG_CPU_FREQ_STAT
 	/* Account power usage for user time */
 	acct_update_power(p, cputime);
 #endif
+<<<<<<< HEAD
 =======
 	/* Account power usage for user time */
 	acct_update_power(p, cputime);
 >>>>>>> 7ad807d... sched: cpufreq: Adds a field cpu_power in the task_struct
+=======
+>>>>>>> e313471... sched: Do not track cpu power for tasks if arch does not support it
 }
 
 /*
@@ -221,6 +227,7 @@ void __account_system_time(struct task_struct *p, cputime_t cputime,
 	acct_account_cputime(p);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef CONFIG_CPU_FREQ_STAT
 	/* Account power usage for system time */
 	acct_update_power(p, cputime);
@@ -229,6 +236,12 @@ void __account_system_time(struct task_struct *p, cputime_t cputime,
 	/* Account power usage for system time */
 	acct_update_power(p, cputime);
 >>>>>>> 7ad807d... sched: cpufreq: Adds a field cpu_power in the task_struct
+=======
+#ifdef CONFIG_CPU_FREQ_STAT
+	/* Account power usage for system time */
+	acct_update_power(p, cputime);
+#endif
+>>>>>>> e313471... sched: Do not track cpu power for tasks if arch does not support it
 }
 
 /*
