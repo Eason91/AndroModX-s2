@@ -534,6 +534,9 @@ static struct snd_soc_dai_driver tasha_dai[];
 static int wcd9335_get_micb_vout_ctl_val(u32 micb_mv);
 
 static int tasha_config_compander(struct snd_soc_codec *, int, int);
+static void tasha_codec_set_tx_hold(struct snd_soc_codec *, u16, bool);
+static int tasha_codec_internal_rco_ctrl(struct snd_soc_codec *codec,
+				  bool enable);
 
 /* Hold instance to soundwire platform device */
 struct tasha_swr_ctrl_data {
@@ -771,6 +774,17 @@ struct tasha_priv {
 	struct tx_mute_work tx_mute_dwork[TASHA_NUM_DECIMATORS];
 	int hph_l_gain;
 	int hph_r_gain;
+<<<<<<< HEAD
+=======
+	int rx_7_count;
+	int rx_8_count;
+	bool clk_mode;
+	bool clk_internal;
+
+	/* Lock to protect mclk enablement */
+	struct mutex mclk_lock;
+
+>>>>>>> 4db87703... ASoC:[Backported msm-4.4r9] wcd9335: Add support to enable low power mode on codec
 };
 
 static int tasha_codec_vote_max_bw(struct snd_soc_codec *codec,
