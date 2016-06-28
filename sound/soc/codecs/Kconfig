@@ -417,6 +417,10 @@ config SND_SOC_WCD_SPI
 	depends on CONFIG_SPI
 	tristate
 
+config SND_SOC_WCD_SPI
+	depends on CONFIG_SPI
+	tristate
+
 config SND_SOC_WL1273
 	tristate
 
