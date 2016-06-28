@@ -413,6 +413,10 @@ config SND_SOC_WCD_SPI
 	tristate
 >>>>>>> 1d75b04... ASoC:[Backported msm-4.4r9] wcd_dsp_mgr: Add the WCD DSP manager driver
 
+config SND_SOC_WCD_SPI
+	depends on CONFIG_SPI
+	tristate
+
 config SND_SOC_WL1273
 	tristate
 
