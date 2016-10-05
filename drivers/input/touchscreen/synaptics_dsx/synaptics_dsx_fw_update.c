@@ -1781,7 +1781,24 @@ static ssize_t fwu_sysfs_image_name_show(struct device *dev,
 static ssize_t fwu_sysfs_image_name_store(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t count)
 {
+<<<<<<< HEAD
 	if (sscanf(buf, "%s", fwu->image_name) != 1)
+=======
+	ssize_t retval;
+	if (!buf || count > MAX_IMAGE_NAME_LEN) {
+		dev_err(fwu->rmi4_data->pdev->dev.parent,
+				"%s: Failed to copy image file name\n",
+				__func__);
+		return -EINVAL;
+	}
+
+	if (!mutex_trylock(&dsx_fwu_sysfs_mutex))
+		return -EBUSY;
+	retval = sscanf(buf, "%49s", fwu->image_name);
+	mutex_unlock(&dsx_fwu_sysfs_mutex);
+
+	if (retval != 1)
+>>>>>>> bb89558... input: synaptics_dsx: add checks of user input data for image name
 		return -EINVAL;
 
 	return count;
