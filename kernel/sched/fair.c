@@ -2399,12 +2399,25 @@ static int select_best_cpu(struct task_struct *p, int target, int reason,
 			continue;
 		}
 
+<<<<<<< HEAD
 		/*
 		 * For CPUs that are not completely idle, pick one with the
 		 * lowest load and break ties with power cost
 		 */
 		if (cpu_load > min_load)
 			continue;
+=======
+	if (env.need_idle) {
+		if (stats.best_idle_cpu >= 0)
+			target = stats.best_idle_cpu;
+		else if (stats.least_loaded_cpu >= 0)
+			target = stats.least_loaded_cpu;
+	} else if (stats.best_cpu >= 0) {
+		if (stats.best_sibling_cpu >= 0 &&
+				stats.best_cpu != task_cpu(p) &&
+				stats.min_cost == stats.best_sibling_cpu_cost)
+			stats.best_cpu = stats.best_sibling_cpu;
+>>>>>>> 855a420... fix the bug in select best cpu that returns -1 as target cpu
 
 		if (cpu_load < min_load) {
 			min_load = cpu_load;
