@@ -1085,7 +1085,31 @@ static int __cpufreq_add_dev(struct device *dev, struct subsys_interface *sif,
 		goto err_set_policy_cpu;
 	}
 
+<<<<<<< HEAD
 	if (cpufreq_driver->get) {
+=======
+	/* related cpus should atleast have policy->cpus */
+	cpumask_copy(policy->related_cpus, policy->cpus);
+
+	/*
+	 * affected cpus must always be the one, which are online. We aren't
+	 * managing offline cpus here.
+	 */
+	cpumask_and(policy->cpus, policy->cpus, cpu_online_mask);
+
+	if (!recover_policy) {
+		policy->user_policy.min = policy->min;
+		policy->user_policy.max = policy->max;
+	}
+
+	down_write(&policy->rwsem);
+	write_lock_irqsave(&cpufreq_driver_lock, flags);
+	for_each_cpu(j, policy->cpus)
+		per_cpu(cpufreq_cpu_data, j) = policy;
+	write_unlock_irqrestore(&cpufreq_driver_lock, flags);
+
+	if (cpufreq_driver->get && !cpufreq_driver->setpolicy) {
+>>>>>>> 775b8ef... use cpumask copy instead of cpumask or to copy a mask
 		policy->cur = cpufreq_driver->get(policy->cpu);
 		if (!policy->cur) {
 			pr_err("%s: ->get() failed\n", __func__);
