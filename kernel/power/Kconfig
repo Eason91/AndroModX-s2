@@ -26,6 +26,18 @@ config WAKELOCK
 	bool
 	default y
 
+<<<<<<< HEAD
+=======
+config PDESIRE_WAKELOCK_DYNAMIC_LIMITER
+	bool "Setup an Dynamic wakelock blocker"
+	depends on WAKELOCK
+	default y
+	help
+	  Our target is to release less wakelocks because apps and kernel
+	  sometimes pushes too many wakelocks (which is unneccesarry)
+	  Tristan Marsell <tristan.marsell@t-online.de>
+
+>>>>>>> 254d033... wakelock: add switch and tunables to PDesire Dynamic wakelock blocker
 config HIBERNATE_CALLBACKS
 	bool
 

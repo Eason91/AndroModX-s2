@@ -17,6 +17,7 @@
 #include <linux/list.h>
 #include <linux/rbtree.h>
 #include <linux/slab.h>
+#include <linux/moduleparam.h>
 
 static DEFINE_MUTEX(wakelocks_lock);
 
@@ -72,6 +73,60 @@ static inline void decrement_wakelocks_number(void)
 	number_of_wakelocks--;
 }
 #else /* CONFIG_PM_WAKELOCKS_LIMIT = 0 */
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_PDESIRE_WAKELOCK_DYNAMIC_LIMITER
+static unsigned int number_of_wakelocks;
+bool psesire_wakelock_enable = true;
+unsigned int pdesire_wakelock_limit = 100;
+unsigned int pdesire_wakelock_limit_range = 60;
+module_param_named(psesire_wakelock_enable, psesire_wakelock_enable, bool, 0664);
+module_param_named(pdesire_wakelock_limit, pdesire_wakelock_limit, int, 0664);
+module_param_named(pdesire_wakelock_limit_range, pdesire_wakelock_limit_range, int, 0664);
+
+static inline bool wakelocks_in_blocked_range(void)
+{
+	unsigned int range;
+
+	range = pdesire_wakelock_limit + pdesire_wakelock_limit_range;
+
+	/* Null check if a Config is not set */
+	if (!range)
+		goto finish;
+
+	if (number_of_wakelocks > range) {
+		number_of_wakelocks = 0;
+		goto finish;
+	}
+
+	if (number_of_wakelocks > pdesire_wakelock_limit)
+		return true;
+
+finish:
+	return false;
+}
+
+static inline bool wakelocks_limit_exceeded(void)
+{
+	if (psesire_wakelock_enable)
+		return wakelocks_in_blocked_range();
+	else
+		return false;
+}
+
+static inline void increment_wakelocks_number(void)
+{
+	if (psesire_wakelock_enable)
+		number_of_wakelocks++;
+}
+
+static inline void decrement_wakelocks_number(void)
+{
+	if (psesire_wakelock_enable)
+		number_of_wakelocks--;
+}
+#else
+>>>>>>> 254d033... wakelock: add switch and tunables to PDesire Dynamic wakelock blocker
 static inline bool wakelocks_limit_exceeded(void) { return false; }
 static inline void increment_wakelocks_number(void) {}
 static inline void decrement_wakelocks_number(void) {}
