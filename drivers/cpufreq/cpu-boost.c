@@ -166,9 +166,13 @@ static int boost_adjust_notify(struct notifier_block *nb, unsigned long val,
 
 		min = max(b_min, ib_min);
 
+<<<<<<< HEAD
 		pr_debug("CPU%u policy min before boost: %u kHz\n",
 			 cpu, policy->min);
 		pr_debug("CPU%u boost min: %u kHz\n", cpu, min);
+=======
+	min = min(ib_min, policy->max);
+>>>>>>> 14bc818... cpu-boost: fix derp
 
 		cpufreq_verify_within_limits(policy, min, UINT_MAX);
 
@@ -385,15 +389,29 @@ static void cpuboost_input_event(struct input_handle *handle,
 		unsigned int type, unsigned int code, int value)
 {
 	u64 now;
+	unsigned int min_interval;
 
+<<<<<<< HEAD
 	if (!input_boost_enabled)
 		return;
 
 	now = ktime_to_us(ktime_get());
 	if (now - last_input_time < MIN_INPUT_INTERVAL)
 		return;
+=======
+#ifdef CONFIG_STATE_NOTIFIER
+	if (state_suspended)
+		return;
+#endif
 
-	if (work_pending(&input_boost_work))
+	if (!input_boost_enabled || work_pending(&input_boost_work))
+		return;
+
+	now = ktime_to_us(ktime_get());
+	min_interval = max(min_input_interval, input_boost_ms);
+>>>>>>> 14bc818... cpu-boost: fix derp
+
+	if (now - last_input_time < min_interval * USEC_PER_MSEC)
 		return;
 
 	queue_work(cpu_boost_wq, &input_boost_work);
