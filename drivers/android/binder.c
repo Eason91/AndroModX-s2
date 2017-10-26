@@ -63,7 +63,7 @@ static kuid_t binder_context_mgr_uid = INVALID_UID;
 static int binder_last_id;
 static struct workqueue_struct *binder_deferred_workqueue;
 
-bool android_binder_security = true;
+bool android_binder_security = false;
 module_param_named(secure_binder, android_binder_security, bool, 0444);
 
 #define BINDER_DEBUG_ENTRY(name) \
@@ -1328,8 +1328,12 @@ static void binder_transaction_buffer_release(struct binder_proc *proc,
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 static int binder_translate_binder(struct flat_binder_object *fp,
+=======
+int binder_translate_binder(struct flat_binder_object *fp,
+>>>>>>> bfbe489... binder: disable security enhancements by default
 				   struct binder_transaction *t,
 				   struct binder_thread *thread)
 {
@@ -1381,7 +1385,7 @@ static int binder_translate_binder(struct flat_binder_object *fp,
 	return 0;
 }
 
-static int binder_translate_handle(struct flat_binder_object *fp,
+int binder_translate_handle(struct flat_binder_object *fp,
 				   struct binder_transaction *t,
 				   struct binder_thread *thread)
 {
@@ -1436,7 +1440,7 @@ static int binder_translate_handle(struct flat_binder_object *fp,
 	return 0;
 }
 
-static int binder_translate_fd(int fd,
+int binder_translate_fd(int fd,
 			       struct binder_transaction *t,
 			       struct binder_thread *thread,
 			       struct binder_transaction *in_reply_to)
@@ -1601,8 +1605,12 @@ static int binder_fixup_parent(struct binder_transaction *t,
 	return 0;
 }
 
+<<<<<<< HEAD
 >>>>>>> 6d49509... binder: Add security hooks to binder and implement the hooks for SELinux.
 static void binder_transaction(struct binder_proc *proc,
+=======
+void binder_transaction(struct binder_proc *proc,
+>>>>>>> bfbe489... binder: disable security enhancements by default
 			       struct binder_thread *thread,
 			       struct binder_transaction_data *tr, int reply)
 {
@@ -2980,7 +2988,7 @@ out:
 	return ret;
 }
 
-static int binder_ioctl_set_ctx_mgr(struct file *filp)
+int binder_ioctl_set_ctx_mgr(struct file *filp)
 {
 	int ret = 0;
 	struct binder_proc *proc = filp->private_data;
