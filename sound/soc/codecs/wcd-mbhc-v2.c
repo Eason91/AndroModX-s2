@@ -36,6 +36,7 @@
 #include <sound/jack.h>
 #include "wcd-mbhc-v2.h"
 #include "wcdcal-hwdep.h"
+<<<<<<< HEAD
 #include <linux/debugfs.h>
 
 #include "../../../drivers/misc/type-c-ti.h"
@@ -43,6 +44,9 @@
 static struct wcd_mbhc *mbhc_data = NULL;
 bool is_type_c_headset_inserted = false;
 static bool is_headset_inserted_or_removed = false;
+=======
+#include "wcd9335.h"
+>>>>>>> bf5cbbd... sound_control: add speaker private mode
 
 #define WCD_MBHC_JACK_MASK (SND_JACK_HEADSET | SND_JACK_OC_HPHL | \
 			   SND_JACK_OC_HPHR | SND_JACK_LINEOUT | \
@@ -122,6 +126,22 @@ bool jack_connected = false;
 bool jack_detect(void)
 {
 	return jack_connected;
+}
+
+void sound_control_spk_priv_enable_fn(void)
+{
+	if (sound_control_spk_priv) {
+		pr_info("Sound Control: Jack detected..");
+		spk_priv_enable();
+	}
+}
+
+void sound_control_spk_priv_disable_fn(void)
+{
+	if (sound_control_spk_priv) {
+		pr_info("Sound Control: Jack disconnected..");
+		spk_priv_disable();
+	}
 }
 
 static void __hphocp_off_report(struct wcd_mbhc *mbhc, u32 jack_status,
@@ -618,6 +638,7 @@ static void wcd_mbhc_report_plug(struct wcd_mbhc *mbhc, int insertion,
 		jack_connected = false;
 		impedence_hph_left = 0;
 		impedence_hph_right = 0;
+		sound_control_spk_priv_disable_fn();
 	} else {
 		/*
 		 * Report removal of current jack type.
@@ -649,6 +670,7 @@ static void wcd_mbhc_report_plug(struct wcd_mbhc *mbhc, int insertion,
 			jack_connected = false;
 			impedence_hph_left = 0;
 			impedence_hph_right = 0;
+			sound_control_spk_priv_disable_fn();
 
 			if (mbhc->hph_status == SND_JACK_LINEOUT) {
 
@@ -775,6 +797,7 @@ static void wcd_mbhc_report_plug(struct wcd_mbhc *mbhc, int insertion,
 						SND_JACK_MECHANICAL),
 					    WCD_MBHC_JACK_MASK);
 			jack_connected = true;
+			sound_control_spk_priv_enable_fn();
 		} else {
 			pr_debug("%s: Skip reporting insertion\n", __func__);
 		}
