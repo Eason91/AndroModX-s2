@@ -73,6 +73,28 @@ module_param(det_extn_cable_en, int,
 		S_IRUGO | S_IWUSR | S_IWGRP);
 MODULE_PARM_DESC(det_extn_cable_en, "enable/disable extn cable detect");
 
+<<<<<<< HEAD
+=======
+/* AGNi Audio Jack Testing & Debuging (psndna88@gmail.com) */
+int hs_detect_plug_time_ms = (1 * 1000);
+int special_hs_detect_time_ms = (2 * 1000);
+int mbhc_button_press_threshold_min = 250;
+int wcd_fake_removal_min_period_ms = 100;
+int fake_rem_retry_attempts = 10;
+int wcd_mbhc_spl_hs_cnt = 1;
+int wcd_mbhc_btn_press_compl_timeout_ms = 50;
+uint32_t impedence_hph_left, impedence_hph_right;
+module_param_named(hs_detect_plug_time_ms, hs_detect_plug_time_ms, int, 0664);
+module_param_named(mbhc_button_press_threshold_min_ms, mbhc_button_press_threshold_min, int, 0664);
+module_param_named(wcd_fake_removal_min_period_ms, wcd_fake_removal_min_period_ms, int, 0664);
+module_param_named(fake_remove_retry_attempts, fake_rem_retry_attempts, int, 0664);
+module_param_named(special_hs_detect_time_ms, special_hs_detect_time_ms, int, 0664);
+module_param_named(wcd_mbhc_spl_hs_cnt, wcd_mbhc_spl_hs_cnt, int, 0664);
+module_param_named(wcd_mbhc_btn_press_compl_timeout_ms, wcd_mbhc_btn_press_compl_timeout_ms, int, 0664);
+module_param(impedence_hph_left, int, S_IRUGO);
+module_param(impedence_hph_right, int, S_IRUGO);
+
+>>>>>>> f3825bc... wcd-mbhc-v2: show headphone impedance by sysfs
 enum wcd_mbhc_cs_mb_en_flag {
 	WCD_MBHC_EN_CS = 0,
 	WCD_MBHC_EN_MB,
@@ -83,6 +105,15 @@ enum wcd_mbhc_cs_mb_en_flag {
 static void wcd_mbhc_jack_report(struct wcd_mbhc *mbhc,
 				struct snd_soc_jack *jack, int status, int mask)
 {
+<<<<<<< HEAD
+=======
+	pr_debug("[%s]==> status[%d]type[%d]\n", __FUNCTION__, status, jack->jack->type);
+	if (!status && (jack->jack->type&WCD_MBHC_JACK_MASK)) {
+		switch_set_state(&accdet_data, 0);
+	} else if (jack->jack->type&WCD_MBHC_JACK_MASK) {
+		switch_set_state(&accdet_data, status);
+	}
+>>>>>>> f3825bc... wcd-mbhc-v2: show headphone impedance by sysfs
 	snd_soc_jack_report(jack, status, mask);
 }
 
@@ -585,6 +616,8 @@ static void wcd_mbhc_report_plug(struct wcd_mbhc *mbhc, int insertion,
 		hphlocp_off_report(mbhc, SND_JACK_OC_HPHL);
 		mbhc->current_plug = MBHC_PLUG_TYPE_NONE;
 		jack_connected = false;
+		impedence_hph_left = 0;
+		impedence_hph_right = 0;
 	} else {
 		/*
 		 * Report removal of current jack type.
@@ -614,6 +647,8 @@ static void wcd_mbhc_report_plug(struct wcd_mbhc *mbhc, int insertion,
 			wcd_mbhc_jack_report(mbhc, &mbhc->headset_jack,
 					    0, WCD_MBHC_JACK_MASK);
 			jack_connected = false;
+			impedence_hph_left = 0;
+			impedence_hph_right = 0;
 
 			if (mbhc->hph_status == SND_JACK_LINEOUT) {
 
@@ -656,6 +691,7 @@ static void wcd_mbhc_report_plug(struct wcd_mbhc *mbhc, int insertion,
 			(mbhc->mbhc_cfg->linein_th != 0)) {
 				mbhc->mbhc_cb->compute_impedance(mbhc,
 						&mbhc->zl, &mbhc->zr);
+<<<<<<< HEAD
 				pr_info("%s:mbhc->zl=%d,mbhc->zr=%d,mbhc->mbhc_cfg->linein_th=%d\n",
 					__func__,mbhc->zl,mbhc->zr,mbhc->mbhc_cfg->linein_th);
 			if ((mbhc->zl > mbhc->mbhc_cfg->linein_th &&
@@ -663,6 +699,31 @@ static void wcd_mbhc_report_plug(struct wcd_mbhc *mbhc, int insertion,
 				(mbhc->zr > mbhc->mbhc_cfg->linein_th &&
 				 mbhc->zr < MAX_IMPED) &&
 				(jack_type == SND_JACK_HEADPHONE)) {
+=======
+				pr_info("%s: impedance L:%d R:%d\n", __func__,
+					 mbhc->zl, mbhc->zr);
+				impedence_hph_left = mbhc->zl;
+				impedence_hph_right = mbhc->zr;
+			} else {
+				pr_debug("%s: skip impedance detection\n",
+					__func__);
+			}
+
+			if (jack_type == SND_JACK_HEADPHONE)
+				skip_impdet_retry = true;
+			else
+				skip_impdet_retry = false;
+
+			if (mbhc->zl > mbhc->mbhc_cfg->linein_th &&
+			    jack_type == SND_JACK_ANC_HEADPHONE) {
+				if(!wcd_mbhc_is_hph_pa_on(mbhc)) {
+					pr_debug("%s: Skip Stereo microphone reporting\n",
+						 __func__);
+				}
+			} else if (mbhc->zl > mbhc->mbhc_cfg->linein_th &&
+				mbhc->zr > mbhc->mbhc_cfg->linein_th &&
+				jack_type == SND_JACK_HEADPHONE) {
+>>>>>>> f3825bc... wcd-mbhc-v2: show headphone impedance by sysfs
 				jack_type = SND_JACK_LINEOUT;
 				mbhc->current_plug = MBHC_PLUG_TYPE_HIGH_HPH;
 				if (mbhc->hph_status) {
@@ -691,6 +752,8 @@ static void wcd_mbhc_report_plug(struct wcd_mbhc *mbhc, int insertion,
 		if (!skip_report) {
 			pr_info("%s: Reporting insertion %d(%x)\n", __func__,
 				 jack_type, mbhc->hph_status);
+			pr_info("%s: Reporting plug type: %x\n", __func__,
+				 mbhc->current_plug);
 			wcd_mbhc_jack_report(mbhc, &mbhc->headset_jack,
 					    (mbhc->hph_status |
 						SND_JACK_MECHANICAL),
