@@ -177,6 +177,14 @@ SYSCALL_DEFINE1(syncfs, int, fd)
  */
 int vfs_fsync_range(struct file *file, loff_t start, loff_t end, int datasync)
 {
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_DYNAMIC_FSYNC
+	if (likely(dyn_fsync_active && !dyn_fsync_only_emergency_sync && suspend_active))
+		return 0;
+	else {
+#endif
+>>>>>>> fe4a30b... fs: dynamic sync 2.1 - option to only force sync during panic/reboot
 	if (!file->f_op || !file->f_op->fsync)
 		return -EINVAL;
 	return file->f_op->fsync(file, start, end, datasync);
@@ -211,11 +219,27 @@ static int do_fsync(unsigned int fd, int datasync)
 
 SYSCALL_DEFINE1(fsync, unsigned int, fd)
 {
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_DYNAMIC_FSYNC
+	if (likely(dyn_fsync_active && !dyn_fsync_only_emergency_sync && suspend_active))
+		return 0;
+	else
+#endif
+>>>>>>> fe4a30b... fs: dynamic sync 2.1 - option to only force sync during panic/reboot
 	return do_fsync(fd, 0);
 }
 
 SYSCALL_DEFINE1(fdatasync, unsigned int, fd)
 {
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_DYNAMIC_FSYNC
+	if (likely(dyn_fsync_active && !dyn_fsync_only_emergency_sync && suspend_active))
+		return 0;
+	else
+#endif
+>>>>>>> fe4a30b... fs: dynamic sync 2.1 - option to only force sync during panic/reboot
 	return do_fsync(fd, 1);
 }
 
@@ -286,6 +310,14 @@ EXPORT_SYMBOL(generic_write_sync);
 SYSCALL_DEFINE4(sync_file_range, int, fd, loff_t, offset, loff_t, nbytes,
 				unsigned int, flags)
 {
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_DYNAMIC_FSYNC
+	if (likely(dyn_fsync_active && !dyn_fsync_only_emergency_sync && suspend_active))
+		return 0;
+	else {
+#endif
+>>>>>>> fe4a30b... fs: dynamic sync 2.1 - option to only force sync during panic/reboot
 	int ret;
 	struct fd f;
 	struct address_space *mapping;
@@ -371,5 +403,13 @@ out:
 SYSCALL_DEFINE4(sync_file_range2, int, fd, unsigned int, flags,
 				 loff_t, offset, loff_t, nbytes)
 {
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_DYNAMIC_FSYNC
+	if (likely(dyn_fsync_active && !dyn_fsync_only_emergency_sync && suspend_active))
+		return 0;
+	else
+#endif
+>>>>>>> fe4a30b... fs: dynamic sync 2.1 - option to only force sync during panic/reboot
 	return sys_sync_file_range(fd, offset, nbytes, flags);
 }
