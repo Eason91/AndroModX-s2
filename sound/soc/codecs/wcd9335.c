@@ -155,8 +155,12 @@ enum tasha_sido_voltage {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 static int pdesireaudio_uhqa_mode = 0;
+=======
+static int pdesireaudio_uhqa_mode = 1;
+>>>>>>> 40112ec... wcd9335: enable PDesire audio UHQA mode
 module_param(pdesireaudio_uhqa_mode, int,
 		S_IRUGO | S_IWUSR | S_IWGRP);
 MODULE_PARM_DESC(pdesireaudio_uhqa_mode, "enable/disable PDesireAudio UHQA Mode");
@@ -3518,7 +3522,15 @@ static void tasha_codec_hph_post_pa_config(struct tasha_priv *tasha,
 			scale_val = 0x3;
 			break;
 		case CLS_H_LOHIFI:
+<<<<<<< HEAD
 			scale_val = 0x1;
+=======
+			// Force HIFI 
+			if (!pdesireaudio_uhqa_mode)
+				scale_val = 0x1;
+			else
+				scale_val = 0x2;
+>>>>>>> 40112ec... wcd9335: enable PDesire audio UHQA mode
 			break;
 		}
 		break;
