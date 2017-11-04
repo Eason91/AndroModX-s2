@@ -242,6 +242,37 @@ int msm_ipc_router_register_server(struct msm_ipc_port *server_port,
  */
 int msm_ipc_router_unregister_server(struct msm_ipc_port *server_port);
 
+<<<<<<< HEAD
+=======
+/**
+ * register_ipcrtr_af_init_notifier() - Register for ipc router socket
+ *				address family initialization callback
+ * @nb: Notifier block which will be notified once address family is
+ *	initialized.
+ *
+ * Return: 0 on success, standard error code otherwise.
+ */
+int register_ipcrtr_af_init_notifier(struct notifier_block *nb);
+
+/**
+ * unregister_ipcrtr_af_init_notifier() - Unregister for ipc router socket
+ *					address family initialization callback
+ * @nb: Notifier block which will be notified once address family is
+ *	initialized.
+ *
+ * Return: 0 on success, standard error code otherwise.
+ */
+int unregister_ipcrtr_af_init_notifier(struct notifier_block *nb);
+
+/**
+ * msm_ipc_router_set_ws_allowed() - To Enable/disable the wakeup source allowed
+ *					flag
+ * @flag: Flag to set/clear the wakeup soruce allowed
+ *
+ */
+void msm_ipc_router_set_ws_allowed(bool flag);
+
+>>>>>>> d0446d9... add dynamic enable or disable wakeup source feature
 #else
 
 struct msm_ipc_port *msm_ipc_router_create_port(
@@ -304,6 +335,21 @@ static inline int msm_ipc_router_unregister_server(
 	return -ENODEV;
 }
 
+<<<<<<< HEAD
+=======
+int register_ipcrtr_af_notifier(struct notifier_block *nb)
+{
+	return -ENODEV;
+}
+
+int register_ipcrtr_af_notifier(struct notifier_block *nb)
+{
+	return -ENODEV;
+}
+
+void msm_ipc_router_set_ws_allowed(bool flag) { }
+
+>>>>>>> d0446d9... add dynamic enable or disable wakeup source feature
 #endif
 
 #endif
