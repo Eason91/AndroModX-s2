@@ -165,7 +165,11 @@ DECLARE_PER_CPU(unsigned long, process_counts);
 extern int nr_processes(void);
 extern unsigned long nr_running(void);
 extern unsigned long nr_iowait(void);
+<<<<<<< HEAD
 extern u64 nr_running_integral(unsigned int cpu);
+=======
+extern unsigned long avg_nr_running(void);
+>>>>>>> parent of c2267d9... cpuquiet: Runnable threads governor
 extern unsigned long nr_iowait_cpu(int cpu);
 extern unsigned long this_cpu_load(void);
 
