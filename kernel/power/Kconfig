@@ -26,11 +26,7 @@ config WAKELOCK
 	bool
 	default y
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> c6852d8... wakelock: PDesire Dynamic wakelock blocker
+
 config PDESIRE_WAKELOCK_DYNAMIC_LIMITER
 	bool "Setup an Dynamic wakelock blocker"
 	depends on WAKELOCK
@@ -40,9 +36,7 @@ config PDESIRE_WAKELOCK_DYNAMIC_LIMITER
 	  sometimes pushes too many wakelocks (which is unneccesarry)
 	  Tristan Marsell <tristan.marsell@t-online.de>
 
-<<<<<<< HEAD
->>>>>>> 254d033... wakelock: add switch and tunables to PDesire Dynamic wakelock blocker
-=======
+
 config PDESIRE_WAKELOCK_LIMIT
 	int "wakelock limit"
 	range 50 200
@@ -55,7 +49,7 @@ config PDESIRE_WAKELOCK_LIMIT_RANGE
 	depends on PDESIRE_WAKELOCK_DYNAMIC_LIMITER
 	default 60
 
->>>>>>> c6852d8... wakelock: PDesire Dynamic wakelock blocker
+
 config HIBERNATE_CALLBACKS
 	bool
 

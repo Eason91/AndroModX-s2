@@ -73,9 +73,6 @@ static inline void decrement_wakelocks_number(void)
 	number_of_wakelocks--;
 }
 #else /* CONFIG_PM_WAKELOCKS_LIMIT = 0 */
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 #ifdef CONFIG_PDESIRE_WAKELOCK_DYNAMIC_LIMITER
 static unsigned int number_of_wakelocks;
 bool psesire_wakelock_enable = true;
@@ -84,20 +81,12 @@ unsigned int pdesire_wakelock_limit_range = 60;
 module_param_named(psesire_wakelock_enable, psesire_wakelock_enable, bool, 0664);
 module_param_named(pdesire_wakelock_limit, pdesire_wakelock_limit, int, 0664);
 module_param_named(pdesire_wakelock_limit_range, pdesire_wakelock_limit_range, int, 0664);
-=======
-#ifdef CONFIG_PDESIRE_WAKELOCK_DYNAMIC_LIMITER
-static unsigned int number_of_wakelocks;
->>>>>>> c6852d8... wakelock: PDesire Dynamic wakelock blocker
 
 static inline bool wakelocks_in_blocked_range(void)
 {
 	unsigned int range;
 
-<<<<<<< HEAD
 	range = pdesire_wakelock_limit + pdesire_wakelock_limit_range;
-=======
-	range = CONFIG_PDESIRE_WAKELOCK_LIMIT + CONFIG_PDESIRE_WAKELOCK_LIMIT_RANGE;
->>>>>>> c6852d8... wakelock: PDesire Dynamic wakelock blocker
 
 	/* Null check if a Config is not set */
 	if (!range)
@@ -108,11 +97,7 @@ static inline bool wakelocks_in_blocked_range(void)
 		goto finish;
 	}
 
-<<<<<<< HEAD
 	if (number_of_wakelocks > pdesire_wakelock_limit)
-=======
-	if (number_of_wakelocks > CONFIG_PDESIRE_WAKELOCK_LIMIT)
->>>>>>> c6852d8... wakelock: PDesire Dynamic wakelock blocker
 		return true;
 
 finish:
@@ -121,39 +106,24 @@ finish:
 
 static inline bool wakelocks_limit_exceeded(void)
 {
-<<<<<<< HEAD
 	if (psesire_wakelock_enable)
 		return wakelocks_in_blocked_range();
 	else
 		return false;
-=======
-	return wakelocks_in_blocked_range();
->>>>>>> c6852d8... wakelock: PDesire Dynamic wakelock blocker
 }
 
 static inline void increment_wakelocks_number(void)
 {
-<<<<<<< HEAD
 	if (psesire_wakelock_enable)
 		number_of_wakelocks++;
-=======
-	number_of_wakelocks++;
->>>>>>> c6852d8... wakelock: PDesire Dynamic wakelock blocker
 }
 
 static inline void decrement_wakelocks_number(void)
 {
-<<<<<<< HEAD
 	if (psesire_wakelock_enable)
 		number_of_wakelocks--;
 }
 #else
->>>>>>> 254d033... wakelock: add switch and tunables to PDesire Dynamic wakelock blocker
-=======
-	number_of_wakelocks--;
-}
-#else
->>>>>>> c6852d8... wakelock: PDesire Dynamic wakelock blocker
 static inline bool wakelocks_limit_exceeded(void) { return false; }
 static inline void increment_wakelocks_number(void) {}
 static inline void decrement_wakelocks_number(void) {}
