@@ -312,15 +312,6 @@ static void power_supply_changed_work(struct work_struct *work)
 				      __power_supply_changed_work);
 
 		power_supply_update_leds(psy);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-		blocking_notifier_call_chain(&power_supply_chain, 0, NULL);
-=======
->>>>>>> parent of 7034f0f... drivers/power: retain changes before caf/LA.BR.1.3.7_rb1.3
-		atomic_notifier_call_chain(&power_supply_notifier,
-				PSY_EVENT_PROP_CHANGED, psy);
->>>>>>> 7034f0f... drivers/power: retain changes before caf/LA.BR.1.3.7_rb1.3
 
 		kobject_uevent(&psy->dev->kobj, KOBJ_CHANGE);
 		spin_lock_irqsave(&psy->changed_lock, flags);

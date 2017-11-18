@@ -154,13 +154,7 @@ enum tasha_sido_voltage {
 	SIDO_VOLTAGE_NOMINAL_MV = 1100,
 };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-static int pdesireaudio_uhqa_mode = 0;
-=======
 static int pdesireaudio_uhqa_mode = 1;
->>>>>>> 40112ec... wcd9335: enable PDesire audio UHQA mode
 module_param(pdesireaudio_uhqa_mode, int,
 		S_IRUGO | S_IWUSR | S_IWGRP);
 MODULE_PARM_DESC(pdesireaudio_uhqa_mode, "enable/disable PDesireAudio UHQA Mode");
@@ -170,13 +164,9 @@ module_param(pdesireaudio_class_ab_mode, int,
 		S_IRUGO | S_IWUSR | S_IWGRP);
 MODULE_PARM_DESC(pdesireaudio_class_ab_mode, "enable/disable PDesireAudio Class AB Mode");
 
-<<<<<<< HEAD
->>>>>>> 97834c2... sound:codecs: disable PDesireAudio by default
-=======
 int sound_control_spk_priv = 0;
 int sound_control_spk_gain = 0;
 
->>>>>>> bf5cbbd... sound_control: add speaker private mode
 static int dig_core_collapse_enable = 1;
 module_param(dig_core_collapse_enable, int,
 		S_IRUGO | S_IWUSR | S_IWGRP);
@@ -3522,15 +3512,14 @@ static void tasha_codec_hph_post_pa_config(struct tasha_priv *tasha,
 			scale_val = 0x3;
 			break;
 		case CLS_H_LOHIFI:
-<<<<<<< HEAD
 			scale_val = 0x1;
-=======
+
 			// Force HIFI 
 			if (!pdesireaudio_uhqa_mode)
 				scale_val = 0x1;
 			else
 				scale_val = 0x2;
->>>>>>> 40112ec... wcd9335: enable PDesire audio UHQA mode
+
 			break;
 		}
 		break;
@@ -3980,13 +3969,12 @@ static int tasha_codec_hphr_dac_event(struct snd_soc_dapm_widget *w,
 					__func__, hph_mode);
 			return -EINVAL;
 		}
-<<<<<<< HEAD
+
 		wcd_clsh_fsm(codec, &tasha->clsh_d,
 			     WCD_CLSH_EVENT_PRE_DAC,
 			     WCD_CLSH_STATE_HPHR,
 			     ((hph_mode == CLS_H_LOHIFI) ?
 			       CLS_H_HIFI : hph_mode));
-=======
 		if (!pdesireaudio_class_ab_mode) {
 			wcd_clsh_fsm(codec, &tasha->clsh_d,
 					 WCD_CLSH_EVENT_PRE_DAC,
@@ -4002,7 +3990,7 @@ static int tasha_codec_hphr_dac_event(struct snd_soc_dapm_widget *w,
 					   CLS_AB : hph_mode));
 			pr_info("%s: SND_SOC_DAPM_PRE_PMU PDesire Audio forced CLS_AB mode \n", __func__);
 		}
->>>>>>> bf5cbbd... sound_control: add speaker private mode
+
 
 		tasha_codec_hph_mode_config(codec, event, hph_mode);
 
@@ -4035,13 +4023,12 @@ static int tasha_codec_hphr_dac_event(struct snd_soc_dapm_widget *w,
 		     WCD_CLSH_STATE_HPHL))
 			tasha_codec_hph_mode_config(codec, event, hph_mode);
 
-<<<<<<< HEAD
+
 		wcd_clsh_fsm(codec, &tasha->clsh_d,
 			     WCD_CLSH_EVENT_POST_PA,
 			     WCD_CLSH_STATE_HPHR,
 			     ((hph_mode == CLS_H_LOHIFI) ?
 			       CLS_H_HIFI : hph_mode));
-=======
 		if (!pdesireaudio_class_ab_mode) {
 			wcd_clsh_fsm(codec, &tasha->clsh_d,
 					 WCD_CLSH_EVENT_POST_PA,
@@ -4057,7 +4044,6 @@ static int tasha_codec_hphr_dac_event(struct snd_soc_dapm_widget *w,
 					   CLS_AB : hph_mode));
 			pr_info("%s: SND_SOC_DAPM_POST_PMD PDesire Audio forced CLS_AB mode \n", __func__);
 		}
->>>>>>> bf5cbbd... sound_control: add speaker private mode
 		break;
 	};
 
@@ -4095,13 +4081,13 @@ static int tasha_codec_hphl_dac_event(struct snd_soc_dapm_widget *w,
 					__func__, hph_mode);
 			return -EINVAL;
 		}
-<<<<<<< HEAD
+
 		wcd_clsh_fsm(codec, &tasha->clsh_d,
 			     WCD_CLSH_EVENT_PRE_DAC,
 			     WCD_CLSH_STATE_HPHL,
 			     ((hph_mode == CLS_H_LOHIFI) ?
 			       CLS_H_HIFI : hph_mode));
-=======
+
 
 		if (!pdesireaudio_class_ab_mode) {
 			wcd_clsh_fsm(codec, &tasha->clsh_d,
@@ -4118,7 +4104,7 @@ static int tasha_codec_hphl_dac_event(struct snd_soc_dapm_widget *w,
 					   CLS_AB : hph_mode));
 			pr_info("%s: SND_SOC_DAPM_PRE_PMU PDesire Audio forced CLS_AB mode \n", __func__);
 		}
->>>>>>> bf5cbbd... sound_control: add speaker private mode
+
 
 		tasha_codec_hph_mode_config(codec, event, hph_mode);
 
@@ -4150,13 +4136,12 @@ static int tasha_codec_hphl_dac_event(struct snd_soc_dapm_widget *w,
 		if (!(wcd_clsh_get_clsh_state(&tasha->clsh_d) &
 		     WCD_CLSH_STATE_HPHR))
 			tasha_codec_hph_mode_config(codec, event, hph_mode);
-<<<<<<< HEAD
 		wcd_clsh_fsm(codec, &tasha->clsh_d,
 			     WCD_CLSH_EVENT_POST_PA,
 			     WCD_CLSH_STATE_HPHL,
 			     ((hph_mode == CLS_H_LOHIFI) ?
 			       CLS_H_HIFI : hph_mode));
-=======
+
 		if (!pdesireaudio_class_ab_mode) {
 			wcd_clsh_fsm(codec, &tasha->clsh_d,
 					 WCD_CLSH_EVENT_POST_PA,
@@ -4173,7 +4158,6 @@ static int tasha_codec_hphl_dac_event(struct snd_soc_dapm_widget *w,
 			pr_info("%s: SND_SOC_DAPM_POST_PMD PDesire Audio forced CLS_AB mode \n", __func__);
 		}
 
->>>>>>> bf5cbbd... sound_control: add speaker private mode
 		break;
 	};
 
@@ -11835,9 +11819,8 @@ err:
 	return ret;
 }
 
-<<<<<<< HEAD
-=======
-static struct regulator *tasha_codec_find_ondemand_regulator(
+
+/*static struct regulator *tasha_codec_find_ondemand_regulator(
 		struct snd_soc_codec *codec, const char *name)
 {
 	int i;
@@ -11856,7 +11839,7 @@ static struct regulator *tasha_codec_find_ondemand_regulator(
 		name);
 	return NULL;
 }
-
+*/
 #ifdef CONFIG_SOUND_CONTROL
 void update_headphones_volume_boost(unsigned int vol_boost)
 {
@@ -12192,7 +12175,7 @@ static struct attribute_group sound_control_attr_group = {
 static struct kobject *sound_control_kobj;
 #endif
 
->>>>>>> bf5cbbd... sound_control: add speaker private mode
+
 static int tasha_codec_probe(struct snd_soc_codec *codec)
 {
 	struct wcd9xxx *control;
