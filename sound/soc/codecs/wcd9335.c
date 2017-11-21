@@ -775,8 +775,6 @@ struct tasha_priv {
 	struct tx_mute_work tx_mute_dwork[TASHA_NUM_DECIMATORS];
 	int hph_l_gain;
 	int hph_r_gain;
-<<<<<<< HEAD
-=======
 	int rx_7_count;
 	int rx_8_count;
 	bool clk_mode;
@@ -785,7 +783,6 @@ struct tasha_priv {
 	/* Lock to protect mclk enablement */
 	struct mutex mclk_lock;
 
->>>>>>> 4db87703... ASoC:[Backported msm-4.4r9] wcd9335: Add support to enable low power mode on codec
 };
 
 static int tasha_codec_vote_max_bw(struct snd_soc_codec *codec,

@@ -61,10 +61,6 @@ struct usecase uc[] = {
 	{6, 14, 6600},		/* UC11: 2*(Spkr + Comp + SB) */
 	{2, 3, 2700},		/* UC12: Spkr + SB */
 	{4, 6, 5400},		/* UC13: 2*(Spkr + SB) */
-	{3, 5, 3900},		/* UC14: Spkr + SB + VI */
-	{6, 10, 7800},		/* UC15: 2*(Spkr + SB + VI) */
-	{2, 3, 3600},		/* UC16: Spkr + VI */
-	{4, 6, 7200},		/* UC17: 2*(Spkr + VI) */
 };
 #define MAX_USECASE	ARRAY_SIZE(uc)
 
@@ -151,33 +147,6 @@ struct port_params pp[MAX_USECASE][SWR_MSTR_PORT_LEN] = {
 		{63, 12, 31},
 		{7, 6, 0},
 		{63, 13, 31},
-	},
-	/* UC 14 */
-	{
-		{7, 1, 0},
-		{63, 12, 31},
-		{15, 7, 0},
-	},
-	/* UC 15 */
-	{
-		{7, 1, 0},
-		{63, 12, 31},
-		{15, 7, 0},
-		{7, 6, 0},
-		{63, 13, 31},
-		{15, 10, 0},
-	},
-	/* UC 16 */
-	{
-		{7, 1, 0},
-		{15, 7, 0},
-	},
-	/* UC 17 */
-	{
-		{7, 1, 0},
-		{15, 7, 0},
-		{7, 6, 0},
-		{15, 10, 0},
 	},
 };
 
@@ -638,78 +607,12 @@ static void swrm_apply_port_config(struct swr_master *master)
 	struct swrm_mports *mport;
 	struct swr_mstr_ctrl *swrm = swr_get_ctrl_data(master);
 
-<<<<<<< HEAD
 	u32 reg[SWRM_MAX_PORT_REG];
 	u32 val[SWRM_MAX_PORT_REG];
 	int len = 0;
-=======
-	if (!swrm) {
-		pr_err("%s: swrm is null\n", __func__);
-		return;
-	}
-
-	dev_dbg(swrm->dev, "%s: master num_port: %d\n", __func__,
-		master->num_port);
-
-	mport = list_first_entry_or_null(&swrm->mport_list,
-					struct swrm_mports,
-					list);
-	if (!mport) {
-		dev_err(swrm->dev, "%s: list is empty\n", __func__);
-		return;
-	}
-
-	for (i = 0; i < master->num_port; i++) {
-		port = swrm_get_port(master, mstr_ports[mport->id]);
-		if (!port || port->ch_en)
-			goto inc_loop;
-
-		port_disable_cnt++;
-		port_type = mstr_port_type[mport->id];
-		value = ((port->ch_en)
-				<< SWRM_DP_PORT_CTRL_EN_CHAN_SHFT);
-		value |= ((port->offset2)
-				<< SWRM_DP_PORT_CTRL_OFFSET2_SHFT);
-		value |= ((port->offset1)
-				<< SWRM_DP_PORT_CTRL_OFFSET1_SHFT);
-		value |= port->sinterval;
-
-		swrm->write(swrm->handle,
-			    SWRM_DP_PORT_CTRL_BANK((mport->id+1), bank),
-			    value);
-		swrm_cmd_fifo_wr_cmd(swrm, 0x00, port->dev_id, 0x00,
-				SWRS_DP_CHANNEL_ENABLE_BANK(port_type, bank));
-
-		dev_dbg(swrm->dev, "%s: mport :%d, reg: 0x%x, val: 0x%x\n",
-			__func__, mport->id,
-			(SWRM_DP_PORT_CTRL_BANK((mport->id+1), bank)), value);
-
-inc_loop:
-		mport_next = list_next_entry(mport, list);
-		if (port && !port->ch_en) {
-			list_del(&mport->list);
-			kfree(mport);
-		}
-		if (!mport_next) {
-			dev_err(swrm->dev, "%s: end of list\n", __func__);
-			break;
-		}
-		mport = mport_next;
-	}
-	master->num_port -= port_disable_cnt;
-
-	dev_dbg(swrm->dev, "%s:disable ports: %d, active ports (rem): %d\n",
-		__func__, port_disable_cnt,  master->num_port);
-}
->>>>>>> a25f240... soundwire: Fix NULL pointer dereference
 
 	int mask = (SWRM_MCP_FRAME_CTRL_BANK_ROW_CTRL_BMSK |
 		SWRM_MCP_FRAME_CTRL_BANK_COL_CTRL_BMSK);
-
-	if (!swrm) {
-		pr_err("%s: swrm is null\n", __func__);
-		return;
-	}
 
 	bank = get_inactive_bank_num(swrm);
 	dev_dbg(swrm->dev, "%s: enter bank: %d master_ports: %d\n",
@@ -727,32 +630,6 @@ inc_loop:
 	swrm_cmd_fifo_wr_cmd(swrm, 0x01, 0xF, 0x00,
 			SWRS_SCP_HOST_CLK_DIV2_CTL_BANK(bank));
 
-<<<<<<< HEAD
-=======
-	swrm_copy_data_port_config(master, bank);
-}
-
-static void swrm_copy_data_port_config(struct swr_master *master, u8 bank)
-{
-	u32 value;
-	struct swr_port_info *port;
-	int i;
-	int port_type;
-	struct swrm_mports *mport;
-	u32 reg[SWRM_MAX_PORT_REG];
-	u32 val[SWRM_MAX_PORT_REG];
-	int len = 0;
-	struct swr_mstr_ctrl *swrm = swr_get_ctrl_data(master);
-
-	if (!swrm) {
-		pr_err("%s: swrm is null\n", __func__);
-		return;
-	}
-
-	dev_dbg(swrm->dev, "%s: master num_port: %d\n", __func__,
-		master->num_port);
-
->>>>>>> a25f240... soundwire: Fix NULL pointer dereference
 	mport = list_first_entry_or_null(&swrm->mport_list,
 					struct swrm_mports,
 					list);
@@ -880,23 +757,6 @@ static int swrm_connect_port(struct swr_master *master,
 port_fail:
 	kfree(mport);
 mem_fail:
-<<<<<<< HEAD
-=======
-	list_for_each_safe(ptr, next, &swrm->mport_list) {
-		mport = list_entry(ptr, struct swrm_mports, list);
-		for (i = 0; i < portinfo->num_port; i++) {
-			if (portinfo->port_id[i] == mstr_ports[mport->id]) {
-				port = swrm_get_port(master,
-						portinfo->port_id[i]);
-				if (port)
-					port->ch_en = false;
-				list_del(&mport->list);
-				kfree(mport);
-				break;
-			}
-		}
-	}
->>>>>>> a25f240... soundwire: Fix NULL pointer dereference
 	mutex_unlock(&swrm->mlock);
 	return ret;
 }

@@ -90,11 +90,7 @@ struct msm_isp_bufq *msm_isp_get_bufq(
 	uint32_t bufq_index = bufq_handle & 0xFF;
 
 	if ((bufq_handle == 0) ||
-<<<<<<< HEAD
 		(bufq_index > buf_mgr->num_buf_q))
-=======
-		(bufq_index >= buf_mgr->num_buf_q))
->>>>>>> fc79cb0... msm: camera: fix off-by-one overflow in msm_isp_get_bufq
 		return NULL;
 
 	bufq = &buf_mgr->bufq[bufq_index];

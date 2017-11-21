@@ -1243,12 +1243,7 @@ static int msm_lsm_ioctl_compat(struct snd_pcm_substream *substream,
 			dev_err(rtd->dev,
 				"%s: %s: not supported if using topology\n",
 				__func__, "SET_PARAMS_32");
-<<<<<<< HEAD
 			return -EINVAL;
-=======
-			err = -EINVAL;
-			goto done;
->>>>>>> 7d7bf78... ASoC: msm: acquire lock in ioctl
 		}
 
 		if (copy_from_user(&det_params32, arg,
@@ -1464,7 +1459,7 @@ static int msm_lsm_ioctl(struct snd_pcm_substream *substream,
 			dev_err(rtd->dev,
 				"%s REG_SND_MODEL failed err %d\n",
 				__func__, err);
-		goto done;
+		return err;
 		}
 		break;
 	case SNDRV_LSM_SET_PARAMS: {

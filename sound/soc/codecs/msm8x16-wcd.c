@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-/* Copyright (c) 2014-2015, The Linux Foundation. All rights reserved.
-=======
+
 /* Copyright (c) 2015-2016, The Linux Foundation. All rights reserved.
->>>>>>> e97e90c... ASoC: msm8x16-wcd: Update HPH PA gain for Tombak
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and

@@ -404,12 +404,8 @@ static struct {
 	int	user_cal_read;
 	int	user_cal_available;
 	u32	user_cal_rcvd;
-<<<<<<< HEAD
 	int	user_cal_exp_size;
 	int	device_opened;
-=======
-	u32	user_cal_exp_size;
->>>>>>> 778c89b... wcnss: fix the potential buffer flow issue in firmware setup
 	int	iris_xo_mode_set;
 	int	fw_vbatt_state;
 	char	wlan_nv_macAddr[WLAN_MAC_ADDR_SIZE];
