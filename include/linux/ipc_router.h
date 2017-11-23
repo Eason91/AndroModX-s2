@@ -242,8 +242,6 @@ int msm_ipc_router_register_server(struct msm_ipc_port *server_port,
  */
 int msm_ipc_router_unregister_server(struct msm_ipc_port *server_port);
 
-<<<<<<< HEAD
-=======
 /**
  * register_ipcrtr_af_init_notifier() - Register for ipc router socket
  *				address family initialization callback
@@ -272,7 +270,7 @@ int unregister_ipcrtr_af_init_notifier(struct notifier_block *nb);
  */
 void msm_ipc_router_set_ws_allowed(bool flag);
 
->>>>>>> d0446d9... add dynamic enable or disable wakeup source feature
+
 #else
 
 struct msm_ipc_port *msm_ipc_router_create_port(
@@ -335,8 +333,7 @@ static inline int msm_ipc_router_unregister_server(
 	return -ENODEV;
 }
 
-<<<<<<< HEAD
-=======
+
 int register_ipcrtr_af_notifier(struct notifier_block *nb)
 {
 	return -ENODEV;
@@ -349,7 +346,7 @@ int register_ipcrtr_af_notifier(struct notifier_block *nb)
 
 void msm_ipc_router_set_ws_allowed(bool flag) { }
 
->>>>>>> d0446d9... add dynamic enable or disable wakeup source feature
+
 #endif
 
 #endif

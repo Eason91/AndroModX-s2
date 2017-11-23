@@ -105,11 +105,9 @@ struct rr_packet {
 	struct rr_opt_hdr opt_hdr;
 	struct sk_buff_head *pkt_fragment_q;
 	uint32_t length;
-<<<<<<< HEAD
-=======
 	struct kref ref;
 	bool ws_need;
->>>>>>> d0446d9... add dynamic enable or disable wakeup source feature
+
 };
 
 /**

@@ -145,12 +145,9 @@ struct msm_ipc_router_xprt_info {
 	struct work_struct read_data;
 	struct workqueue_struct *workqueue;
 	void *log_ctx;
-<<<<<<< HEAD
-=======
 	struct kref ref;
 	struct completion ref_complete;
 	bool dynamic_ws;
->>>>>>> d0446d9... add dynamic enable or disable wakeup source feature
 };
 
 #define RT_HASH_SIZE 4
@@ -3805,14 +3802,11 @@ static int msm_ipc_router_add_xprt(struct msm_ipc_router_xprt *xprt)
 	xprt_info->abort_data_read = 0;
 	INIT_WORK(&xprt_info->read_data, do_read_data);
 	INIT_LIST_HEAD(&xprt_info->list);
-<<<<<<< HEAD
-=======
 	kref_init(&xprt_info->ref);
 	init_completion(&xprt_info->ref_complete);
 	xprt_info->dynamic_ws = 0;
 	if (xprt->get_ws_info)
 		xprt_info->dynamic_ws = xprt->get_ws_info(xprt);
->>>>>>> d0446d9... add dynamic enable or disable wakeup source feature
 
 	xprt_info->workqueue = create_singlethread_workqueue(xprt->name);
 	if (!xprt_info->workqueue) {
